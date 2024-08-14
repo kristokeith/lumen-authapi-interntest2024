@@ -40,6 +40,12 @@ Ini adalah proyek API yang dikembangkan menggunakan Lumen dan didokumentasikan d
 
 4. **Konfigurasi .env**
 
+    Salin file .env.example ke .env dan sesuaikan konfigurasi database dan pengaturan lainnya sesuai kebutuhan Anda:
+
+    ```
+    cp .env.example .env
+    ```
+
     Edit file .env dengan pengaturan database Anda:
 
     ```
