@@ -27,7 +27,7 @@ Ini adalah proyek API yang dikembangkan menggunakan Lumen dan didokumentasikan d
 2. **Masuk ke Direktori Proyek**
 
     ```
-    cd repo-name
+    cd lumen-authapi-interntest2024.git
     ```
 
 3. **Instal Dependensi**
