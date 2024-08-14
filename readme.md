@@ -1,250 +1,108 @@
-# Lumen API Starter
+# Lumen Auth - Swagger API Starter
 
-A starter template to develop API with Lumen 8.
+Ini adalah proyek API yang dikembangkan menggunakan Lumen dan didokumentasikan dengan Swagger. Proyek ini mencakup berbagai endpoint API yang dapat digunakan untuk melakukan operasi CRUD pada pengguna, dengan dokumentasi API yang lengkap melalui Swagger.
 
-This repo will not be maintained anymore because 👇
+## Prerequisites
 
-> Note: In the years since releasing Lumen, PHP has made a variety of wonderful performance improvements. For this reason, along with the availability of Laravel Octane, we no longer recommend that you begin new projects with Lumen. Instead, we recommend always beginning new projects with Laravel.
+-   API CRUD untuk **user**
+-   Dokumentasi API menggunakan **Swagger**
 
-https://lumen.laravel.com/docs/9.x
+### Prerequisites
 
-### Included Packages
+-   PHP >= 7.1
+-   Composer
+-   MySQL
+-   Lumen Framework
 
-- [flipbox/lumen-generator@^8.0](https://github.com/flipboxstudio/lumen-generator)
-- [fruitcake/laravel-cors@^2.0](https://github.com/fruitcake/laravel-cors)
-- [spatie/laravel-fractal@^5.8](https://github.com/spatie/laravel-fractal)
-- [spatie/laravel-query-builder@^3.6](https://github.com/spatie/laravel-query-builder)
-- [tymon/jwt-auth@^1.0](https://github.com/tymondesigns/jwt-auth)
+## Installation
 
-### Installation
+1. **Clone Repositori**
 
-- Clone the Repo:
-    - `git clone git@github.com:munza/lumen-api-starter.git`
-    - `git clone https://github.com/munza/lumen-api-starter.git`
-- `cd lumen-api-starter`
-- SSH into the Docker container with `make ssh` and run the following.
-    - `composer create-project`
-    - `php artisan key:generate`
-    - `php artisan jwt:secret`
-    - `php artisan migrate`
-- Exit from Docker container with `CTRL+C` or `exit`.
-- Rename `docker-compose.local.yaml` to `docker-compose.overridee.yaml`
-- Start the local development server with `make up`.
-- Run tests with `make dev-test`.
-- Run `make` to see available commands.
+    Pertama, clone repositori ini ke mesin lokal Anda:
 
-#### Create new user
-
-- `make ssh`
-- `php artisan ti`
-- `App\Models\User::factory()->create(['email' => 'admin@localtest.me', 'password' => 'password'])`
-
-### Configuration
-
-- Edit `.env` file for environment variables.
-- Edit the files in `config` directory for application configuration.
-
-### Usage
-
-Always `ssh` into Docker container `app` by running `make ssh` before executing any `artisan` commands.
-
-#### Add a new resource endpoint
-
-- Add endpoint in `routes/web.php`.
-
-    ```php
-    $router->group(['middleware' => 'auth:api'], function ($router) {
-        $app->get('/users', 'UserController@index');
-    });
+    ```
+    git clone https://github.com/kristokeith/lumen-authapi-interntest2024.git
     ```
 
-- Add controller with `php artisan make:controller {name}` command
+2. **Masuk ke Direktori Proyek**
 
-- Add model at `php artisan make:model {name}`. You can use `-m` flag to add migration file and `-f` flag for factory file.
-
-- Add service at `app` directory.
-
-    ```php
-    <?php
-
-    namespace App;
-
-    class Accounts
-    {
-        // Add service methods.
-    }
+    ```
+    cd repo-name
     ```
 
-- Load the service in controller.
+3. **Instal Dependensi**
 
-    ```php
-    <?php
+    Instal semua dependensi yang diperlukan dengan Composer:
 
-    namespace App\Http\Controllers;
-
-    use App\Accounts;
-
-    class UserController extends Controller
-    {
-        /**
-         * Controller constructor.
-         *
-         * @param  \App\Accounts  $accounts
-         */
-        public function __construct(Accounts $accounts)
-        {
-            $this->accounts = $accounts;
-        }
-
-        // Add controller methods.
-    }
+    ```
+    composer install
     ```
 
-    You can also use Facade for the services.
+4. **Konfigurasi .env**
 
-- Add transformers at `app/Transformers` directory or use the command `php artisan make:transformer {name}`.
+    Salin file .env.example ke .env dan sesuaikan konfigurasi database dan pengaturan lainnya sesuai kebutuhan Anda:
 
-    ```php
-    <?php
-
-    namespace App\Transformers;
-
-    use App\User;
-    use League\Fractal\TransformerAbstract;
-
-    class UserTransformer extends TransformerAbstract
-    {
-        /**
-         * Transform object to array.
-         *
-         * @param  \App\User $user
-         * @return array
-         */
-        public function transform(User $user): array
-        {
-            return [
-                'id' => (int) $user->id,
-                'email' => (string) $user->email,
-            ];
-        }
-    }
+    ```
+    cp .env.example .env
     ```
 
-- Render JSON in controllers
+    Edit file .env dengan pengaturan database Anda:
 
-    ```php
-    <?php
+    ```
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=nama_database
+    DB_USERNAME=nama_pengguna
+    DB_PASSWORD=katasandi
 
-    namespace App\Http\Controllers;
-
-    use App\Accounts;
-    use Illuminate\Http\JsonResponse;
-    use Illuminate\Http\Request;
-    use Illuminate\Http\Response;
-
-    class UserController extends Controller
-    {
-        /**
-         * Controller constructor.
-         *
-         * @param  \App\Accounts  $accounts
-         */
-        public function __construct(Accounts $accounts)
-        {
-            $this->accounts = $accounts;
-        }
-
-        /**
-         * List of all users.
-         *
-         * @return \Illuminate\Http\JsonResponse
-         */
-        public function index(): JsonResponse
-        {
-            $users = $this->accounts->getUsersWithPagination($request);
-
-            return response()->json($users, Response::HTTP_OK);
-        }
-    }
     ```
 
-- Exception message, status code and details can be displayed by declaring these as methods in an exception class.
+5. **Generate Kunci Aplikasi**
 
-    ```php
-    <?php
+    Generate kunci aplikasi untuk enkripsi:
 
-    namespace App\Exceptions;
-
-    use Symfony\Component\HttpKernel\Exception\HttpException;
-
-    class CustomException extends HttpException
-    {
-        public function getMessage(): string
-        {
-            return 'Custom message';
-        }
-
-        public function getStatusCode(): int
-        {
-            return 500;
-        }
-
-        public function getDetails(): ?array
-        {
-            return [];
-        }
-    }
+    ```
+    php artisan key:generate
     ```
 
-#### Authentication
+6. **Migrasi Database**
 
-- Create Bearer Token
+    Jalankan migrasi untuk membuat tabel yang diperlukan di database:
+
+    ```
+    php artisan migrate
+    ```
+
+7. **Seeding Database**
+
+    Jika Anda ingin menambahkan data dummy ke database, jalankan seeder:
+
+    ```
+    php artisan db:seed
+
+    ```
+
+8. **Jalankan Server**
+
+    Jalankan server Lumen:
+
+    ```
+    php artisan swagger-lume:generate
+    php artisan serve
+    ```
+
+## Dokumentasi API
+
+Dokumentasi API dapat diakses melalui Swagger UI. Setelah Anda menjalankan server Lumen, buka URL berikut di browser Anda:
 
 ```
-curl --request POST 'http://127.0.0.1:8000/auth' \
-    --header 'Content-Type: application/json' \
-    --data-raw '{
-        "email": "admin@localtest.me",
-        "password": "password"
-    }'
+http://127.0.0.1:8000/api/documentation
 ```
 
-Example Bearer Token -
+Di sana Anda akan menemukan dokumentasi lengkap mengenai semua endpoint API yang tersedia.
 
-```
-eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXV0aCIsImlhdCI6MTYzNDI2MTQzNSwiZXhwIjoxNjM0MjY1MDM1LCJuYmYiOjE2MzQyNjE0MzUsImp0aSI6IlVzVm1PZk52dTBrOTZFYk4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.xjvzoFCkxlB_k2z0R0zkeatDDRU0hAbRFMETAEZBsss
-```
+## Kontak
+Jika Anda memiliki pertanyaan atau umpan balik, jangan ragu untuk menghubungi saya di:
 
-Bearer Token need to passed in the request header as 
-
-```
-Authorization: Bearer <token>
-```
-
-- Get Current User
-
-```
-curl --request GET 'http://127.0.0.1:8000/auth' \
-    --header 'Content-Type: application/json' \
-    --header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXV0aCIsImlhdCI6MTYzNDI2MTQzNSwiZXhwIjoxNjM0MjY1MDM1LCJuYmYiOjE2MzQyNjE0MzUsImp0aSI6IlVzVm1PZk52dTBrOTZFYk4iLCJzdWIiOjEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.xjvzoFCkxlB_k2z0R0zkeatDDRU0hAbRFMETAEZBsss'
-```
-
-### Using CORS
-
-Please check [fruitcake/laravel-cors](https://github.com/fruitcake/laravel-cors) in Github for the usage details.
-
-### Todo
-
-- [ ] Move all the extended features inside a package.
-
-### Issues
-
-Please create an issue if you find any bug or error.
-
-### Contribution
-
-Feel free to make a pull request if you want to add anything.
-
-### License
-
-MIT
+- GitHub: https://github.com/lristokeith
