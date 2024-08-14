@@ -1,0 +1,8 @@
+/vendor
+/.idea
+docker-compose.override.yml
+Homestead.json
+Homestead.yaml
+.env
+.phpunit.result.cache
+storage/api-docs/api-docs.json
