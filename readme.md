@@ -2,7 +2,7 @@
 
 Ini adalah proyek API yang dikembangkan menggunakan Lumen dan didokumentasikan dengan Swagger. Proyek ini mencakup berbagai endpoint API yang dapat digunakan untuk melakukan operasi CRUD pada pengguna, dengan dokumentasi API yang lengkap melalui Swagger.
 
-## Prerequisites
+## Features
 
 -   API CRUD untuk **user**
 -   Dokumentasi API menggunakan **Swagger**
